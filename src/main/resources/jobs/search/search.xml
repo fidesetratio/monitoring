@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch https://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<job id="search" xmlns="http://www.springframework.org/schema/batch">
+		<step id="step1" xmlns="http://www.springframework.org/schema/batch" next="step2">
+			<tasklet ref="startInitSearchTasklet"/>
+		</step>
+		<step id="step2" xmlns="http://www.springframework.org/schema/batch" next="decision">
+		<tasklet transaction-manager="monitoringtransactionManager">
+			<chunk reader="searchMemoryReader"           	processor="searchProcessor"  writer="searchMemoryWriter"  commit-interval="10">
+			 
+			</chunk>
+			
+		</tasklet>
+		</step>
+		<decision id="decision" decider="searchDecision">
+	  	<next on="FINISHIT" to="step3" />
+	  	<next on="LOOP" to="step2" />
+		</decision>
+		
+		<step id="step3" xmlns="http://www.springframework.org/schema/batch">
+				<tasklet ref="endSearchTasklet"/>
+		</step> 
+	</job>
+	
+	
+	
+	
+	
+	
+	
+</beans>

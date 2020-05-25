@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch https://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<job id="customwriters" xmlns="http://www.springframework.org/schema/batch">
+		<step id="st1" xmlns="http://www.springframework.org/schema/batch" next="st2">
+			<tasklet ref="startCustomWriterTasklet"/>
+		</step>
+		<step id="st2" xmlns="http://www.springframework.org/schema/batch" next="decision">
+		<tasklet transaction-manager="monitoringtransactionManager">
+			<chunk reader="customInMemoryReader"           	processor="customProcessor"  writer="customInMemoryWriter"  commit-interval="10"/>
+		</tasklet>
+		<listeners>
+			<listener ref="customInMemoryReader"></listener>
+		</listeners>
+		</step>
+			
+	<decision id="decision" decider="decisionCustomWriter">
+	  	<next on="FINISHIT" to="st3" />
+	  	<next on="LOOP" to="st2" />
+	  	
+	</decision>
+
+
+
+		<step id="st3" xmlns="http://www.springframework.org/schema/batch">
+				<tasklet ref="endCustomWriterTasklet"/>
+		</step> 
+	</job>
+	
+	
+	
+	
+	
+	
+	
+</beans>

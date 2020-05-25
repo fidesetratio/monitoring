@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Monitoring Batch</title> 
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <style>
+  .ui-progressbar {
+    position: relative;
+  }
+  .progress-label {
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+  </style>
+  
+</head>
+<body>
+  <h1>Batch Manager</h1> 
+
+
+
+<div id="progressbar"><div class="progress-label"></div></div>
+ 
+
+  <br/><br/>
+
+ 	
+  <br/><br/>
+
+Batch name <input type="text" name="batchname" id="batchname" value="customwriters"/>
+<br/>
+
+  <button id="start">Start Batch</button>
+  
+</body>
+<script type="text/javascript">
+  $(document).ready(function(){
+	  var progressbar = $( "#progressbar" ),
+      progressLabel = $( ".progress-label" );
+	  
+	  function executeBatch(name) {
+		  var id =0;
+		  // strUrl is whatever URL you need to call
+ $.ajax(
+        	    {
+        	        type: 'GET',
+        	        url: '/job/run?jobName='+name,
+        	        success: function(data)
+        	        {
+        	          	id = data;
+        	        },
+        	        error: function(XMLHttpRequest, textStatus, errorThrown)
+        	        {
+        	            alert('Failure');
+						id = 0;
+        	            
+        	        },
+        	        async:false
+        	    });
+
+		  return id;
+		}
+ 
+	  
+	  function GetProgress(id) {
+	
+		    $.ajax({
+		    	type: 'GET',
+		        url: "/job/statprogress?jobId="+id,
+		        success: function (msg) {
+		            
+		            progressbar.progressbar("value", msg.percentage);
+
+		            if (msg.percentage >= 100) {
+		                isDone = true;
+		            } else {
+		                setTimeout(GetProgress(id), 10000);
+		            }
+		        }
+		    });
+		}
+	  
+	  
+    
+    $("#start").click(function(e){
+    
+     
+       
+     	
+        var id = executeBatch($("#batchname").val());
+        if(id > 0){
+        	 progressbar.progressbar({
+                 value: false,
+                 change: function() {
+                   progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+                 },
+                 complete: function() {
+                   progressLabel.text( "Completed" );
+                 }
+               });
+        
+        	 GetProgress(id);
+        }
+    
+        
+        
+        
+       /*  function progress() {
+          var val = progressbar.progressbar( "value" ) || 0;
+     
+          progressbar.progressbar( "value", val + 1 );
+     
+          if ( val < 99 ) {
+            setTimeout( progress, 100 );
+          }
+        }
+        
+    	setTimeout( progress, 10 ); */
+    	
+    	
+    	
+    	
+        	
+    })
+    
+    
+  });
+ 
+</script>
+</html>
