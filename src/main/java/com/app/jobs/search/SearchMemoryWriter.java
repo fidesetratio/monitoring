@@ -62,8 +62,13 @@ public class SearchMemoryWriter extends AbstractItemStreamItemWriter<Map>  {
 	public void open(ExecutionContext executionContext) {
 		// TODO Auto-generated method stub
 		System.out.println("opening......");
+		String namafile  = stepExecution
+		        .getJobExecution()
+		        .getExecutionContext().getString("namafile");
+		
+		System.out.println("nama fie:"+namafile);
 		 wb = new HSSFWorkbook();
-		 resource = new FileSystemResource("output.xlsx");
+		 resource = new FileSystemResource(namafile);
 		 boolean dont = false;
 		 if(resource.exists()) {
 			 dont = true;
@@ -74,12 +79,12 @@ public class SearchMemoryWriter extends AbstractItemStreamItemWriter<Map>  {
 				e.printStackTrace();
 			}
 		 }
+		 
 		 HSSFPalette palette = wb.getCustomPalette();
 		 HSSFSheet s = wb.createSheet();
 	
 		 row = 0;
-		 System.out.println("size execut:"+executionContext.size());
-
+		
 		 headers = (ArrayList<String>)	stepExecution
 			        .getJobExecution()
 			        .getExecutionContext().get("headers");

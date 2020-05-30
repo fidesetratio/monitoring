@@ -22,7 +22,7 @@ public class SearchMemoryReader implements ItemReader<Map> {
 	private int next;
 	private List<Map> list;
 	private int start;
-	private int limit=10;
+	private int limit=100;
 	
 	@Autowired
 	private CommonServices commonService;
@@ -46,8 +46,11 @@ public class SearchMemoryReader implements ItemReader<Map> {
 		
 		next = 0;
 		start = stepExecution.getJobExecution().getExecutionContext().getInt("start");
+		limit =  stepExecution.getJobExecution().getExecutionContext().getInt("limitsearch");
 		SearchEngine engine = monitoringService.searchcategory(new Long(1));
-		list  =	 commonService.queryresult(QueryOracle.paging(engine.getQuery(), start, start+limit));
+		String q = QueryOracle.paging(engine.getQuery(), start, start+limit);
+		System.out.println("q:"+q);
+		list  =	 commonService.queryresult(q);
 		System.out.println("before step execution with size="+list.size());
 	}
 

@@ -111,10 +111,21 @@ public class JobRestController {
                  get("totalComplete") == null ? new Double(-1) : jobExecution.
                          getExecutionContext().
                          get("totalComplete"));
+	
+		
 		 
 		 
 		 JobProgress jobProgress = new JobProgress();
 		 jobProgress.setStatus(batchStatus.name());
+		 
+		 if(jobExecution.getExecutionContext().get("namafile") != null) {
+				jobProgress.setFilename((String)jobExecution.getExecutionContext().get("namafile"));
+				 
+		 }
+		 
+
+		 
+		 
 		 boolean isStepExecution=false;
 		 if(jobExecution.getStepExecutions().size()>0)
 		 { 		nbItemsProcessed = 0;	

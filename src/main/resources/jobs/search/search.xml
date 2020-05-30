@@ -4,13 +4,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/batch https://www.springframework.org/schema/batch/spring-batch.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<job id="search" xmlns="http://www.springframework.org/schema/batch">
+	<job id="search" xmlns="http://www.springframework.org/schema/batch" >
 		<step id="step1" xmlns="http://www.springframework.org/schema/batch" next="step2">
 			<tasklet ref="startInitSearchTasklet"/>
 		</step>
 		<step id="step2" xmlns="http://www.springframework.org/schema/batch" next="decision">
 		<tasklet transaction-manager="monitoringtransactionManager">
-			<chunk reader="searchMemoryReader"           	processor="searchProcessor"  writer="searchMemoryWriter"  commit-interval="10">
+			<chunk reader="searchMemoryReader"           	processor="searchProcessor"  writer="searchMemoryWriter"  commit-interval="200">
 			 
 			</chunk>
 			

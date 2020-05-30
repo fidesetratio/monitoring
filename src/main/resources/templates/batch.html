@@ -32,12 +32,13 @@
 
  	
   <br/><br/>
-
-Batch name <input type="text" name="batchname" id="batchname" value="customwriters"/>
+Batch name <input type="text" name="batchname" id="batchname" value="search"/>
 <br/>
 
-  <button id="start">Start Batch</button>
-  
+  <button id="start">Start Download</button>
+	<div>
+		<a id="resultdownload" style="display:none" href="/download/report">Download</a>
+	</div>  
 </body>
 <script type="text/javascript">
   $(document).ready(function(){
@@ -78,9 +79,13 @@ Batch name <input type="text" name="batchname" id="batchname" value="customwrite
 		            progressbar.progressbar("value", msg.percentage);
 
 		            if (msg.percentage >= 100) {
+		            	$("#resultdownload").show();
+		            	$("#resultdownload").attr("href","/download/report?filename="+msg.filename);
 		                isDone = true;
 		            } else {
-		                setTimeout(GetProgress(id), 10000);
+		            	$("#resultdownload").hide();
+		            	setTimeout(GetProgress(id), 10000);
+
 		            }
 		        }
 		    });
@@ -111,18 +116,7 @@ Batch name <input type="text" name="batchname" id="batchname" value="customwrite
         
         
         
-       /*  function progress() {
-          var val = progressbar.progressbar( "value" ) || 0;
-     
-          progressbar.progressbar( "value", val + 1 );
-     
-          if ( val < 99 ) {
-            setTimeout( progress, 100 );
-          }
-        }
-        
-    	setTimeout( progress, 10 ); */
-    	
+   
     	
     	
     	

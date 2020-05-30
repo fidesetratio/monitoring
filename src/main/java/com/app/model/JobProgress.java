@@ -6,7 +6,9 @@ public class JobProgress {
 		private double  total;
 		private double  progress;
 		private double  percentage;
-		
+
+
+		private String filename;
 		
 		public JobProgress() {
 			total = -1;
@@ -53,5 +55,14 @@ public class JobProgress {
 		public void setPercentage(double  percentage) {
 			this.percentage = percentage;
 		}
+		public String getFilename() {
+			return filename;
+		}
+
+
+		public void setFilename(String filename) {
+			this.filename = filename;
+		}
+
 		
 }

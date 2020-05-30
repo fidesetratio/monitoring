@@ -19,8 +19,11 @@ public class SearchDecision implements JobExecutionDecider{
 		currentsize = currentsize+1;
 		currentsize = total(stepExecution.getJobExecution());
 		System.out.println("currentsize="+currentsize+" total="+totalComplete);
+		int limit =  stepExecution.getJobExecution().getExecutionContext().getInt("limitsearch");
+		
+		
 		if(currentsize < totalComplete) {
-			 start=start+10;	
+			 start=start+limit;	
 			 stepExecution.getJobExecution().getExecutionContext().putInt("start", start);
 			 return new FlowExecutionStatus("LOOP");
 		}

@@ -52,6 +52,17 @@ public class StartInitSearchTasklet implements Tasklet{
 			 m = l.get(0);
 		 }
 		
+		 
+		 
+		 chunkContext
+	        .getStepContext()
+	        .getStepExecution()
+	        .getJobExecution()
+	        .getExecutionContext()
+	        .putString("namafile","output.xls");
+		 
+		 
+		 
 		 chunkContext
         .getStepContext()
         .getStepExecution()
@@ -87,7 +98,13 @@ public class StartInitSearchTasklet implements Tasklet{
 	        .getExecutionContext()
 	        .putInt("cursor",new Integer(0));
 		
-		
+		 
+		 chunkContext
+	        .getStepContext()
+	        .getStepExecution()
+	        .getJobExecution()
+	        .getExecutionContext()
+	        .putInt("limitsearch",new Integer(200));
 		return RepeatStatus.FINISHED;
 	}
 	
