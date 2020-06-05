@@ -43,15 +43,16 @@ public class SearchMemoryReader implements ItemReader<Map> {
 	
 	@BeforeStep
 	public void beforeStep(StepExecution stepExecution) {
-		
 		next = 0;
 		start = stepExecution.getJobExecution().getExecutionContext().getInt("start");
 		limit =  stepExecution.getJobExecution().getExecutionContext().getInt("limitsearch");
-		SearchEngine engine = monitoringService.searchcategory(new Long(1));
-		String q = QueryOracle.paging(engine.getQuery(), start, start+limit);
-		System.out.println("q:"+q);
+		String queryexecuted = stepExecution.getJobExecution().getExecutionContext().getString("queryexecuted");
+		String q = QueryOracle.paging(queryexecuted, start, start+limit);
 		list  =	 commonService.queryresult(q);
-		System.out.println("before step execution with size="+list.size());
+		if(list.size()<=0) {
+			System.out.println("before step execution with size="+list.size());
+					
+		}
 	}
 
 

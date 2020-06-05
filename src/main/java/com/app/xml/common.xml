@@ -4,5 +4,14 @@
 <mapper namespace='com.app.dao.CommonDao'>
 <select id="queryresult" resultType="java.util.LinkedHashMap" parameterType="String">
 		${value}
-	</select>
+</select>
+
+<select id="selectproductutamabyregspaj" resultType="com.app.model.DetailProduct" parameterType="String">
+	select pi.lsbs_id,pi.lsdbs_number,l.lsdbs_name from eka.mst_product_insured pi,eka.lst_det_bisnis l where pi.reg_spaj = #{reg_spaj}
+    and (l.lsbs_id = pi.lsbs_id and l.lsdbs_number = pi.lsdbs_number) and <![CDATA[ pi.lsbs_id < 300 ]]>
+</select>
+<select id="selectproductrelevant" resultType="com.app.model.DetailProduct" parameterType="String">
+	  select lsbs_id,lsdbs_number,lsdbs_name from eka.lst_det_bisnis where lsbs_id = #{lsbs_id}
+</select>
+
 </mapper>

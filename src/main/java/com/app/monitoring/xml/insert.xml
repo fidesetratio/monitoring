@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='com.app.dao.MonitoringDao'>
+<insert id="insertSearchEngine" parameterType="com.app.model.SearchEngine">
+  	insert into search_engine(query,active,category_id,label) values(#{query},#{active},1,#{label})
+  </insert>
+  <insert id="insertProductSearching" parameterType="com.app.model.ProductSearching">
+	insert into product_searching(lsbs_id,lsdbs_number,cat_id) values(#{lsbs_id},#{lsdbs_number},#{cat_id})
+  </insert>
+  <insert id="insertColumnVariable" parameterType="com.app.model.ColumnVariable">
+	insert into column_variable(cgid,variable_name,query,column_name) values(#{cgid},#{variable_name},#{query},#{column_name})
+  </insert>
+    <insert id="insertColumnGroup" parameterType="com.app.model.ColumnGroup">
+	insert into column_group(group_name) values(#{group_name})
+  </insert>
+    <insert id="insertProductCategory" parameterType="com.app.model.ProductCategory">
+	insert into product_searching_category(category_name,category_description) values(#{category_name},#{category_description})
+  </insert>
+</mapper>

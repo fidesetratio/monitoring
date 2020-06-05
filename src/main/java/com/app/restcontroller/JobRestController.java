@@ -42,12 +42,37 @@ public class JobRestController {
 	public String handle(HttpServletRequest request) {
 		 String jobName  = ServletRequestUtils.getStringParameter(
 			        request, "jobName", "helloworld");
-		Job job = (Job)context.getBean(jobName);
+		
+		 String startdate  = ServletRequestUtils.getStringParameter(
+			        request, "startdate", "01 Jan 2018");
+		 String enddate  = ServletRequestUtils.getStringParameter(
+			        request, "enddate", "01 Jan 2019");
+		 Long catprodid  = ServletRequestUtils.getLongParameter(
+			        request, "catprodid",new Long(1));
+		 String namafile  = ServletRequestUtils.getStringParameter(
+			        request, "namafile", "output.xls");
+		 
+		 Long cgid  = ServletRequestUtils.getLongParameter(
+			        request, "cgid", new Long(1));
+		 Long queryId  = ServletRequestUtils.getLongParameter(
+			        request, "queryId", new Long(2));
+		
+		 Job job = (Job)context.getBean(jobName);
+		
+		
+		
 		Long jobId = new Long(0);
 		  JobParameters jobParameters = new JobParametersBuilder()
 				  	 .addLong("time",System.currentTimeMillis())
 		             .addString("source", "Spring Boot")
-		             .toJobParameters();
+		             .addString("startdate",startdate)
+		             .addString("enddate", enddate)
+		             .addString("namafile", namafile)
+		             .addLong("cgid", cgid)
+				     .addLong("catprodid", catprodid)
+				     .addLong("queryId", queryId)
+						
+				     .toJobParameters();
 		            try {
 		            	JobExecution jobExecution =	jobLauncher.run(job, jobParameters);
 		            	jobId = jobExecution.getJobInstance().getId();
@@ -102,7 +127,6 @@ public class JobRestController {
 	public JobProgress statprogress(HttpServletRequest request) {
 		 Long jobId  = ServletRequestUtils.getLongParameter(
 			        request, "jobId", new Long(0));
-		 System.out.println(jobId+"--"+jobId);
 		 JobExecution jobExecution = explorer.getJobExecution(jobId);
 		 double nbItemsProcessed = -1;
 		 BatchStatus batchStatus = jobExecution.getStatus();
@@ -112,6 +136,8 @@ public class JobRestController {
                          getExecutionContext().
                          get("totalComplete"));
 	
+		 String completeAutomatic = (String)jobExecution.getExecutionContext().get("completeautomatis");
+		 
 		
 		 
 		 
@@ -138,12 +164,26 @@ public class JobRestController {
 		 jobProgress.setProgress(nbItemsProcessed);
 		 jobProgress.setTotal(jobComplete);
 		 double progress = Math.round(nbItemsProcessed / jobComplete * 100);
+		 
+		 
 		 if(!isStepExecution )
 		 {
 			 progress = -1;
 		 }
 		 jobProgress.setPercentage(progress);
+		 
+			
+		 if(completeAutomatic != null)
+		 {
+			 jobProgress.setProgress((double)100);
+			 jobProgress.setTotal((double)100);
+			 jobProgress.setPercentage((double)100);
+				
+		 }
+
 		 return jobProgress;
+
+		 
 		 
 		    
 	}

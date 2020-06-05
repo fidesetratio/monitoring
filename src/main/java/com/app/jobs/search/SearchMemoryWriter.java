@@ -2,6 +2,7 @@ package com.app.jobs.search;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class SearchMemoryWriter extends AbstractItemStreamItemWriter<Map>  {
 		 if (wb == null) {
 		        return;
 		    }
-		 createFooterRow();
+		   createFooterRow();
 		    try (BufferedOutputStream bos = new BufferedOutputStream(resource.getOutputStream())) {
 		        wb.write(bos);
 		        bos.flush();
@@ -154,12 +155,11 @@ public class SearchMemoryWriter extends AbstractItemStreamItemWriter<Map>  {
 
     
     private void createFooterRow() {
-        HSSFSheet s = wb.getSheetAt(0);
+        if(wb != null) {
+    	HSSFSheet s = wb.getSheetAt(0);
         HSSFRow r = s.createRow(row);
-        Cell c = r.createCell(3);
-        c.setCellType(CellType.FORMULA);
-        c.setCellFormula(String.format("SUM(D3:D%d)", row));
         row++;
+        };
      
     }
 	
@@ -173,43 +173,49 @@ public class SearchMemoryWriter extends AbstractItemStreamItemWriter<Map>  {
 		// TODO Auto-generated method stub
 		size = items.size();
 		System.out.println("SearchMemoryWriter size::"+items.size());
+				HSSFSheet s = wb.getSheetAt(0);
+				 int k = 0;
+				 if(cursor != 0) {
+					 row = cursor;
+				 }
+			    for (Map o : items) {
+			    	k=0;
 		
-		HSSFSheet s = wb.getSheetAt(0);
-		 int k = 0;
-		 if(cursor != 0) {
-			 row = cursor;
-		 }
-	    for (Map o : items) {
-	    	k=0;
-
-	    	System.out.println("rownya apa"+row);
-	    	Row r = s.createRow(row);
-	    	   
-	    	for(String h:headers) {
-	     
-	        Cell c = r.createCell(k);
-	        Object t = o.get(h);
-	        String v = "";
-	        if(t instanceof java.sql.Timestamp) {
-	        	v = (( java.sql.Timestamp)t).toGMTString();
-	        }else if(t instanceof String) {
-	        	v = (String) t;
-	        }
-	       
-	        if(t == null) {
-	        	c.setCellValue(v);
-	        }else {
-	        c.setCellValue(v);
-	        }
-	        k++;
-	    	};
-	    	row++;
-	    }
-	    
-	    cursor = row;
-	    stepExecution
-		        .getJobExecution()
-		        .getExecutionContext().putInt("cursor",cursor);
+			    	System.out.println("rownya apa"+row);
+			    	Row r = s.createRow(row);
+			    	   
+			    	for(String h:headers) {
+			     
+			        Cell c = r.createCell(k);
+			        Object t = o.get(h);
+			        String v = "";
+			        if(t instanceof java.sql.Timestamp) {
+			        	v = (( java.sql.Timestamp)t).toGMTString();
+			        }else if(t instanceof String) {
+			        	v = (String) t;
+			        }else if (t instanceof Double) {
+			        	v = Double.toString((Double)t);
+			        }else if(t instanceof Integer) {
+			        	v = Integer.toString((Integer)t);
+				    }else if(t instanceof BigDecimal) {
+				    	v = ((BigDecimal)t).toString();
+				    }
+			       
+			        if(t == null) {
+			        	c.setCellValue(v);
+			        }else {
+			        c.setCellValue(v);
+			        }
+			        k++;
+			    	};
+			    	row++;
+			    }
+			    
+			    cursor = row;
+			    stepExecution
+				        .getJobExecution()
+				        .getExecutionContext().putInt("cursor",cursor);
+			    
 	}
 
 	

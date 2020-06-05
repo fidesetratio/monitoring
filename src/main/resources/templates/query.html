@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Monitoring Batch</title> 
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <style>
+  .ui-progressbar {
+    position: relative;
+  }
+  .progress-label {
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+  </style>
+  
+</head>
+<body>
+  <h1>Query Manager</h1> 
+  <a th:href="@{/batch/monitor}">back</a>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+<a th:href="@{/batch/query?id={id}&action=add(id=0)}">Add</a> 
+  
+  <table width="100%" >
+  <tr valign="top"><td width="40%">
+    <table border="1">
+  	<tr><td>Label</td> <td>Category Name</td> <td>Active</td><td>Action</td></tr>
+  	<tr th:each="q : ${allquery}">
+  	 	<td th:text="${q.label}"></td>
+  	 	<td th:text="${q.category_name}"></td>
+  		 <td th:text="${q.active}"></td>
+  		 
+  		  <td><a th:href="@{/batch/query?id={id}&action=edit(id=${q.id})}">edit</a>|  <a th:href="@{/batch/query?id={id}&action=delete(id=${q.id})}">delete</a></td>
+  	</tr>
+  </table>
+  </td>
+  
+  
+  <td width="60%">
+  <div th:if="${action == 'edit'}">
+  <h2 th:text="${message}"></h2>
+  
+  					 <form th:object="${search}" method="post">
+    			  	<table width="100%">
+				  		<tr valign="top" ><td colspan="4"> <h2 th:text="${search.label}" /></td></tr>
+				  		<tr valign="top" ><td>Label</td><td><input  th:field = "*{label}" type="text" /></td></tr>
+				  		<tr valign="top" ><td>Active</td><td><select id="active" name="active">
+				  		  <option value="1" th:selected="${search.active == 1 }">YES</option>
+    <option value="0" th:selected="${search.active == 0}">NO</option>
+				  		</select></td></tr>
+				  			<tr valign="top" ><td>Query</td><td><textarea th:field = "*{query}" cols="100" rows="20" ></textarea></td></tr>
+				  				<tr valign="top" ><td colspan="4"><input type="submit" name="submit" value="submit"/></td></tr>
+				  	</table>	
+				  	<input type="hidden" name="update" value="1"/>	
+				  		<input type="hidden"  th:field = "*{id}"/>	
+				  	</form>
+  	</div>
+  		<div th:if="${action == 'add'}">
+  <h2 th:text="${message}"></h2>
+  
+  					 <form th:object="${search}" method="post">
+    			  	<table width="100%">
+				  		<tr valign="top" ><td colspan="4"> <h2 th:text="${search.label}" /></td></tr>
+				  		<tr valign="top" ><td>Label</td><td><input  th:field = "*{label}" type="text" /></td></tr>
+				  		<tr valign="top" ><td>Active</td><td><select id="active" name="active">
+				  		  <option value="1" th:selected="${search.active == 1 }">YES</option>
+    <option value="0" th:selected="${search.active == 0}">NO</option>
+				  		</select></td></tr>
+				  			<tr valign="top" ><td>Query</td><td><textarea th:field = "*{query}" cols="100" rows="20" ></textarea></td></tr>
+				  				<tr valign="top" ><td colspan="4"><input type="submit" name="submit" value="submit"/></td></tr>
+				  	</table>	
+				  	<input type="hidden" name="updateadd" value="1"/>	
+				  		<input type="hidden"  th:field = "*{id}"/>	
+				  	</form>
+  	</div>
+  		
+  
+  </td></tr>
+  </table>
+  
+
+  	
+  </body>
+ </html>

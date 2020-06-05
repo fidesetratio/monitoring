@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='com.app.dao.MonitoringDao'>
+<delete id="deleteSearchEngine" parameterType="Long">
+        delete from search_engine where id=#{id}
+    	</delete>
+<delete id="deleteProductSearching" parameterType="Long">
+        delete from product_searching where id=#{id}
+    	</delete>
+    	    	
+    	<delete id="deleteColumnVariable" parameterType="Long">
+        delete from column_variable where cid=#{cid}
+    	</delete>
+    	    	
+</mapper>

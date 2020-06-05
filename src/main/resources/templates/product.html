@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Monitoring Batch</title> 
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <style>
+  .ui-progressbar {
+    position: relative;
+  }
+  .progress-label {
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+  </style>
+  
+  
+    <script>
+  $( function() {
+    $("#productcategory").change(function(e){
+    		if($(this).val()>0)
+    	 	$(location). attr('href', '/batch/product?catid='+$(this).val());
+    })
+  } );
+  </script>
+  
+</head>
+<body>
+ <h1>Product</h1> 
+  <a th:href="@{/batch/monitor}">back</a> | <a th:href="@{/batch/product?addcategory=1}">Add Category</a>
+  <br/>
+  <div th:if="${addcategory==1}">
+ 	<form method="POST" action="">
+ 	Add Category : <input type="text" name="categoryname" value=""/>
+ 	<input type="hidden" name="submitaddcategory" value="1"/>
+ 	<input type="submit" name="submit" value="submit"/>
+ 	</form>
+  </div>
+  
+  <div id="dialog" title="Basic dialog" style="display:none">
+  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+ 
+ 
+ <table width="100%" border="1">
+ 	<tr valign="top"><td width="20%">Category</td><td width="40%">
+ 	<select id="productcategory">
+ 		 <option value="0" selected>Select Product Category</option>
+  		 <option th:each="p : ${prodcategory}" th:value="${p.cat_id}" th:text="${p.category_name}"  th:selected="${p.cat_id==catid}"></option>
+  		
+ 	</select>
+ 	
+ 	
+ 	</td><td width="40%">
+ 	<form method="POST" action="">
+ 		REG SPAJ <input type="text" name="reg_spaj"  th:value="${reg_spaj}"><input type="submit" name="submit" value="search" /> <select name="optproduct"><option value="1">PRODUCT UTAMA</option><option value="2">RIDER</option></select>
+ 				 <input type="hidden" name="catid"  th:value="${catid}"/>
+ 				  <input type="hidden" name="action"  value="search"/>
+ 	</form>
+ 	</td></tr>
+ 	<tr valign="top"><td width="20%">Product</td><td width="40%">
+
+  
+ 			<table border="1"><tr><td>LSBS_ID</td><td>LSDBS_NUMBER</td><td>Action</td></tr>
+ 			
+ 				<tr th:each="p : ${prods}">
+  	 	<td th:text="${p.lsbs_id}"></td>
+  	 	<td th:text="${p.lsdbs_number}"></td>
+  		 
+  		  <td><a>edit</a>| <a th:href="@{/batch/product?catid={id}&prodid={prodid}&action=del(id=${catid},prodid=${p.id})}">delete</a></td>
+  	</tr>
+ 			
+ 			</table>
+ 			
+ 	</td><td width="40%">
+ 	
+  		
+  				
+ 		<table border="1" width="100%"><tr>
+ 		<form method="POST" action="">
+ 					<td>Pick</td><td>LSBS_ID</td><td>LSDBS_NUMBER</td><td>NAMA PRODUCT</td></tr>
+ 					<tr>
+ 					<td><input type="checkbox" th:name="idChecked" th:value="${detailprod.lsbs_id +'-'+detailprod.lsdbs_number}" /></td><td th:text="${detailprod.lsbs_id != null ? detailprod.lsbs_id : '' }">LSBS_ID</td><td th:text="${detailprod.lsdbs_number != null ? detailprod.lsdbs_number  : '' }">LSDBS_NUMBER</td><td th:text="${detailprod.lsdbs_name != null ? detailprod.lsdbs_name : '' }">NAMA PRODUCT</td></tr>
+ 					
+ 					<tr><td colspan="4" align="center"> RELEVANT PRODUCT </td></tr>
+ 					<tr th:each="relevant:${productRelevant}"><td><input type="checkbox" th:name="idChecked" th:value="${relevant.lsbs_id +'-'+relevant.lsdbs_number}" /></td><td th:text="${relevant.lsbs_id}">212</td><td th:text="${relevant.lsdbs_number}">21</td><td th:text="${relevant.lsdbs_name}">sT</td></tr>
+ 				
+ 		</table>
+ 		<br/>
+ 		<input type="hidden" name="action" value="addproduct"/>
+ 		<input type="hidden" name="reg_spaj" th:value="${reg_spaj}"/>
+ 		<input type="submit" id="addProduct" name="button" value="Add Product"/> Action From<select name="actionfrom"><option value="1">Copy</option><option value="2">New Input</option></select>
+ 		</form>
+ 	</td></tr>
+ 
+ 
+ </table>
+</body>
+</html>

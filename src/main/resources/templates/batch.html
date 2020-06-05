@@ -21,7 +21,10 @@
   
 </head>
 <body>
-  <h1>Batch Manager</h1> 
+
+<a href="/batch/query">Edit Query</a> | <a href="/batch/product">Add Product</a> |  <a href="/batch/column">Add Column</a>
+
+  <h1>Search Manager</h1> 
 
 
 
@@ -31,10 +34,34 @@
   <br/><br/>
 
  	
-  <br/><br/>
-Batch name <input type="text" name="batchname" id="batchname" value="search"/>
-<br/>
-
+ 	<table>
+ 		<tr><td>Search Engine</td><td><input type="text" name="batchname" id="batchname" value="search"/>
+ 		</td></tr>
+ 
+ 		<tr><td>Query Category</td><td><select name="queryId" id="queryId">
+ 		 <option th:each="q : ${allquery}" th:value="${q.id}" th:text="${q.label}"></option>
+  		
+ 		</select>
+ 		</td></tr>
+ 		
+ 		<tr><td>Product Yang dipilih</td><td><select name="catprodid" id="catprodid">
+ 		 <option th:each="p : ${prodcategory}" th:value="${p.cat_id}" th:text="${p.category_name}"></option>
+  		
+ 		</select>
+ 		</td></tr>
+ 		<tr><td>Columns dipilih</td><td><select name="cgid" id="cgid">
+ 		 <option th:each="c : ${groupcolumn}" th:value="${c.cgid}" th:text="${c.group_name}"></option>
+  		</select>
+ 		</td></tr>
+ 		
+ 		
+ 		<tr><td>Start</td><td><input type="text" id="startdate" name="startdate" value="01 Jan 2020"> </td></tr>
+ 		<tr><td>End</td><td> <input type="text" id="enddate" name="enddate" value="01 Feb 2020"> </td></tr>
+ 		<tr><td>Nama File</td><td><input type="text" id="namafile" name="namafile" value="output.xls"></td></tr>
+ 		 		
+ 	</table>
+ 	
+ 	<br/>
   <button id="start">Start Download</button>
 	<div>
 		<a id="resultdownload" style="display:none" href="/download/report">Download</a>
@@ -45,13 +72,13 @@ Batch name <input type="text" name="batchname" id="batchname" value="search"/>
 	  var progressbar = $( "#progressbar" ),
       progressLabel = $( ".progress-label" );
 	  
-	  function executeBatch(name) {
+	  function executeBatch(name,startdate,enddate,namafile,queryId,catprodid,cgid) {
 		  var id =0;
 		  // strUrl is whatever URL you need to call
  $.ajax(
         	    {
         	        type: 'GET',
-        	        url: '/job/run?jobName='+name,
+        	        url: '/job/run?jobName='+name+"&startdate="+startdate+"&enddate="+enddate+"&namafile="+namafile+"&queryId="+queryId+"&catprodid="+catprodid+"&cgid="+cgid,
         	        success: function(data)
         	        {
         	          	id = data;
@@ -96,9 +123,13 @@ Batch name <input type="text" name="batchname" id="batchname" value="search"/>
     $("#start").click(function(e){
     
      
-       
-     	
-        var id = executeBatch($("#batchname").val());
+       var startdate = $("#startdate").val();
+       var enddate = $("#enddate").val();
+       var namafile = $("#namafile").val();	
+       var queryId = $("#queryId").val();	
+       var catprodid = $("#catprodid").val();
+       var cgid = $("#cgid").val();
+        var id = executeBatch($("#batchname").val(),startdate,enddate,namafile,queryId,catprodid,cgid);
         if(id > 0){
         	 progressbar.progressbar({
                  value: false,

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='com.app.dao.MonitoringDao'>
+<update id="updateSearchEngine" parameterType="com.app.model.SearchEngine">
+        update search_engine set query = #{query},active = #{active},label = #{label}
+			where id = #{id}
+    	</update>
+  <update id="updateColumVariable" parameterType="com.app.model.ColumnVariable">
+        update column_variable set query = #{query},variable_name = #{variable_name},column_name = #{column_name},cgid=#{cgid}
+			where cid = #{cid}
+    	</update>
+    	
+    	 <update id="updateStatusZero" parameterType="Long">
+        update column_variable set flag_active = 0 where cgid=#{cgid}
+   	</update>  	
+   	 	 <update id="updateStatusOne" parameterType="Long">
+        update column_variable set flag_active = 1 where cid=#{cid}
+   	</update> 
+    	
+</mapper>

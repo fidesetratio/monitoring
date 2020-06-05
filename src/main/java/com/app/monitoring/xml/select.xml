@@ -4,5 +4,33 @@
 <mapper namespace='com.app.dao.MonitoringDao'>
 <select id="searchcategory" resultType="com.app.model.SearchEngine" parameterType="Long">
 			select * from search_engine e,search_category c where c.id = e.category_id and e.id = #{id}
-	</select>
+</select>
+
+<select id="allsearchcategory" resultType="com.app.model.SearchEngine">
+			select * from search_engine e,search_category c where c.id = e.category_id 
+</select>
+<select id="searchproductbycat" resultType="com.app.model.ProductSearching" parameterType="Long">
+			select * from product_searching where cat_id = #{cat_id}
+</select>
+<select id="searchcategoryproduct" resultType="com.app.model.ProductCategory">
+	select * from product_searching_category
+</select>
+<select id="selectcolumgroup" resultType="com.app.model.ColumnGroup">
+	select * from column_group
+</select>
+<select id="selectcolumvariablebygroupid" resultType="com.app.model.ColumnVariable"  parameterType="Long">
+	select * from column_variable where cgid = #{cgid}
+	
+</select>
+<select id="selectcolumvariablebygroupidAndActive" resultType="com.app.model.ColumnVariable"  parameterType="Long">
+	select * from column_variable where cgid = #{cgid} and flag_active = 1
+	
+</select>
+
+<select id="selectcolumvariablebycolumnid" resultType="com.app.model.ColumnVariable"  parameterType="Long">
+	select * from column_variable where cid = #{cid}
+	
+</select>
+
+
 </mapper>

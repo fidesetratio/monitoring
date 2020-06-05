@@ -26,7 +26,10 @@
  
  <mappers>
       <mapper resource="com/app/monitoring/xml/select.xml" />
-        
+      <mapper resource="com/app/monitoring/xml/update.xml" />
+       <mapper resource="com/app/monitoring/xml/insert.xml" />
+         <mapper resource="com/app/monitoring/xml/delete.xml" />
+          
  </mappers>
  
  
